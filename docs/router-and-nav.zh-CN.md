@@ -38,8 +38,17 @@ type: 入门
 
 ### 从服务器请求菜单
 
-只需在 [models/menu](https://github.com/ant-design/ant-design-pro/blob/master/src/models/menu.js#L111) 中发起 http 请求，menuData 是一个 json 数组。只需服务器返回类似格式的 json 即可。
+只需在 [models/menu](https://github.com/ant-design/ant-design-pro/blob/master/src/models/menu.js#L111) 中发起 http 请求，menuData 是一个 json 数组。
+演示：
+```js
+  const originalMenuData = memoizeOneFormatter(routes, authority, path) // 修改这里 routes 并按照 routes 格式返回 json，才可以支持多语言
+  -const menuData = filterMenuData(originalMenuData);
+  +const newMenu = yield call(getMenuDataAPI); // getMenuDataAPI 在 @/services/api 定义
+  +const menuData = filterMenuData(newMenu);  // 这样不支持多语音 name 要返回 中文菜单名。
+  const breadcrumbNameMap = memoizeOneGetBreadcrumbNameMap(originalMenuData);
+```
 
+只需服务器返回类似格式的 json 即可，注意 json 格式项目名称必须加引号 "path", "name" 才能直接识别。
 ```js
 [
   {
